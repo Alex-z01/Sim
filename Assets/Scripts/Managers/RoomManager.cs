@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-    public GameObject player;
+    GameObject player;
 
     Camera mainCam;
 
@@ -18,6 +18,7 @@ public class RoomManager : MonoBehaviour
     private void Start()
     {
         mainCam = Camera.main;
+        player = GameManager.instance.Player;
         currentRoom = rooms[0];
     }
 
@@ -26,7 +27,9 @@ public class RoomManager : MonoBehaviour
         camX = player.transform.position.x;
         camY = player.transform.position.y;
 
-        camX = Mathf.Clamp(camX, currentRoom.leftX+mainCam.orthographicSize, currentRoom.rightX-mainCam.orthographicSize);
+
+
+        camX = Mathf.Clamp(camX, currentRoom.leftX + (mainCam.orthographicSize*2), currentRoom.rightX - (mainCam.orthographicSize * 2));
         camY = Mathf.Clamp(camY, currentRoom.botY+mainCam.orthographicSize, currentRoom.topY-mainCam.orthographicSize);
 
         mainCam.transform.position = Vector3.MoveTowards(mainCam.transform.position, new Vector3(camX, camY, -10), camSpeed * Time.deltaTime);
