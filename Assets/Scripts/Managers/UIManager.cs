@@ -8,7 +8,9 @@ public class UIManager : MonoBehaviour
     public GameObject DialogueBox;
     public GameObject PromptBox;
     public GameObject PromptContainer;
-    public GameObject ShopDisplay;
+    //public GameObject ShopDisplay;
+
+    public Canvas mainCanvas;
 
     public NPC currentNPC;
     public List<Dialogue> NPCdialogue;
@@ -112,7 +114,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenNpcMenu(GameObject menu)
     {
-        GameObject npcMenu = Instantiate(menu, ShopDisplay.transform);
+        GameObject npcMenu = Instantiate(menu, mainCanvas.transform);
         npcMenu.name = $"{currentNPC.NPC_Name}'s {menu.name}";
     }
 
