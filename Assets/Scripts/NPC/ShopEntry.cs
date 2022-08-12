@@ -22,9 +22,9 @@ public class ShopEntry : MonoBehaviour
         itemCount.text = count.ToString();
 
         if (myShop.mode == Shop.ShopMode.Buy)
-            itemPrice.text = item.Buy_Price.ToString();
+            itemPrice.text = $"${item.Buy_Price}";
         else if (myShop.mode == Shop.ShopMode.Sell)
-            itemPrice.text = item.Sell_Price.ToString();
+            itemPrice.text = $"${item.Sell_Price}";
 
         itemIcon.sprite = item.Item_Icon;
     }
@@ -40,11 +40,11 @@ public class ShopEntry : MonoBehaviour
         itemCount.text = count.ToString();
 
         if (myShop.mode == Shop.ShopMode.Buy)
-            itemPrice.text = item.Buy_Price.ToString();
+            itemPrice.text = $"${item.Buy_Price}";
         else if (myShop.mode == Shop.ShopMode.Sell)
-            itemPrice.text = item.Sell_Price.ToString();
+            itemPrice.text = $"${item.Sell_Price}";
 
-        if(count == 0)
+        if (count == 0)
         {
             Destroy(gameObject);
         }

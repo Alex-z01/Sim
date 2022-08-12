@@ -41,8 +41,8 @@ public class PlayerInventory : MonoBehaviour
         {
             print("Open inv");
 
-            PlayerMovement.busy = !PlayerMovement.busy ? true : false;
-            PlayerMovement.canMove = PlayerMovement.canMove ? false : true;
+            PlayerMovement.Busy = !PlayerMovement.Busy ? true : false;
+            PlayerMovement.CanMove = PlayerMovement.CanMove ? false : true;
 
             bool invActive = inventoryObj.activeSelf ? false : true;
             inventoryObj.SetActive(invActive);
@@ -57,6 +57,20 @@ public class PlayerInventory : MonoBehaviour
                 DeleteItemSlots();
             }     
         }
+    }
+
+    public void AddItem(Item item)
+    {
+        var itemExists = inventory.Find(x => x.item == item);
+
+        if(itemExists != null)
+        {
+            print("Item already exists");
+            itemExists.count += 1;
+            return;
+        }
+        CountedItem cItem = new CountedItem(item, 1);
+        inventory.Add(cItem);
     }
 
     void SpawnItemSlots()

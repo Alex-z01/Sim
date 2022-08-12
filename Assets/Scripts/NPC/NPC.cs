@@ -3,22 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class NpcInteractArgs : EventArgs
+{
+    public PlayerMovement PlayerMovement { get; }
+    public List<Dialogue> Dialogues { get; }
+    public List<Prompt> Prompts { get; }
+    public NpcInteractArgs(PlayerMovement plyrMov, List<Dialogue> dialgs, List<Prompt> prmpts)
+    {
+        PlayerMovement = plyrMov;
+        Dialogues = dialgs;
+        Prompts = prmpts;
+    }
+}
+
 public abstract class NPC : Interactable
 {
     public string NPC_Name;
 
-    public List<Dialogue> dialogues;
-    public List<Prompt> prompts;
+    [SerializeField]
+    private List<Dialogue> _dialogues;
+    [SerializeField]
+    private List<Prompt> _options;
+
+    public EventHandler<NpcInteractArgs> OnInteractEvent;
+
+    private void Start()
+    {
+        StartCoroutine(LazyLoad());
+    }
+
+    IEnumerator LazyLoad()
+    {
+        yield return new WaitForSeconds(1);
+        if (GameManager.instance != null)
+            GameManager.instance.UIManager.SubscribeNpcEvent(this);
+    }
+
+
+    private void OnDisable()
+    {
+        GameManager.instance.UIManager.UnsubscribeNpcEvent(this);
+    }
 
     public override void OnInteract()
     {
-        print($"Interacted with {NPC_Name}");
-        GameManager.instance.Player.GetComponent<PlayerMovement>().canMove = false;
-        GameManager.instance.Player.GetComponent<PlayerMovement>().busy = true;
-        GameManager.instance.UIManager.SetNpcDialogue(dialogues);
-        GameManager.instance.UIManager.SetNpcPrompt(prompts);
-        GameManager.instance.UIManager.SetNPC(this);
-        GameManager.instance.UIManager.StartNPC();
+        if (OnInteractEvent != null)
+        {
+            OnInteractEvent.Invoke(this, new NpcInteractArgs(GameManager.instance.Player.GetComponent<PlayerMovement>(), _dialogues, _options));
+        }        
     }
 
     public abstract void OnYesPrompt(string responseActionName);

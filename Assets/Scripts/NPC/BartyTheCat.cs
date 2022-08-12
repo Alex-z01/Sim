@@ -27,7 +27,6 @@ public class BartyTheCat : NPC
         if(responseActionName == "Shop")
         {
             GameManager.instance.UIManager.inPrompt = false;
-            GameManager.instance.UIManager.inDialogue = false;
             GameManager.instance.UIManager.ToggleDialogue();
             GameManager.instance.UIManager.OpenNpcMenu(shopMenuPrefab);
         }
@@ -37,7 +36,7 @@ public class BartyTheCat : NPC
     {
         print("Done with this NPC");
         GameManager.instance.UIManager.EndNPC();
-        GameManager.instance.Player.GetComponent<PlayerMovement>().canMove = true;
-        GameManager.instance.Player.GetComponent<PlayerMovement>().busy = false;
+        GameManager.instance.Player.GetComponent<PlayerMovement>().CanMove = true;
+        GameManager.instance.Player.GetComponent<PlayerMovement>().Busy = false;
     }
 }

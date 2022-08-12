@@ -4,34 +4,34 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    PlayerInventory PlayerInventory;
-    PlayerMovement PlayerMovement;
-    Animator anim;
+    private Animator _anim;
+    private PlayerInventory _playerInventory;
+    private PlayerMovement _playerMovement;
 
     private void Start()
     {
-        PlayerInventory = GetComponent<PlayerInventory>();
-        PlayerMovement = GetComponent<PlayerMovement>();
-        anim = GetComponent<Animator>();
+        _playerInventory = GetComponent<PlayerInventory>();
+        _playerMovement = GetComponent<PlayerMovement>();
+        _anim = GetComponent<Animator>();
     }
 
     public void AnimControls()
     {
-        if (PlayerMovement.movementInput.magnitude > 0)
+        if (_playerMovement.MovementInput.magnitude > 0 && _playerMovement.CanMove)
         {
-            anim.SetBool("isWalking", true);
+            _anim.SetBool("isWalking", true);
         }
         else
         {
-            anim.SetBool("isWalking", false);
+            _anim.SetBool("isWalking", false);
         }
 
-        anim.SetFloat("x", PlayerMovement.lastDir.normalized.x);
-        anim.SetFloat("y", PlayerMovement.lastDir.normalized.y);
+        _anim.SetFloat("x", _playerMovement.LastDir.normalized.x);
+        _anim.SetFloat("y", _playerMovement.LastDir.normalized.y);
 
-        foreach(EquippableSocket socket in PlayerInventory.sockets)
+        foreach(EquippableSocket socket in _playerInventory.sockets)
         {
-            socket.SetMoveVector(PlayerMovement.movementInput, PlayerMovement.lastDir);
+            socket.SetMoveVector(_playerMovement.MovementInput, _playerMovement.LastDir);
         }
     }
 }

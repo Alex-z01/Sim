@@ -90,10 +90,16 @@ public class Shop : MonoBehaviour
         else if (mode == ShopMode.Sell)
         {
             // Check if player has item
+            var checkItem = playerInventory.inventory.Find(x => x.item == item);
+            if(checkItem != null)
+            {
+                // Decrement item count
+                checkItem.count--;
+                //if(checkItem.count == 0) 
 
-            // Check count, if 1 remove item, otherwise decrement count
 
-            // Add sell value to player money
+                // Add sell value to player money
+            }
         }
     }
 

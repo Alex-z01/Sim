@@ -5,75 +5,56 @@ using UnityEngine;
 // Takes and handles input and movement for a player character
 public class PlayerMovement : MonoBehaviour
 {
-    private PlayerAnimation PlayerAnimation;
+    public bool Busy = false;
+    public bool CanMove = true;
+    public Vector2 LastDir;
+    public Vector2 MovementInput;
 
-    public float moveSpeed = 1f;
-    public float collisionOffset = 0.05f;
-    public ContactFilter2D movementFilter;
+    [SerializeField]
+    private float _moveSpeed = 1f;
 
-    public Vector2 movementInput;
-    public Vector2 lastDir;
-    SpriteRenderer spriteRenderer;
-    Rigidbody2D rb;
-    Animator animator;
-    List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
-    List<RaycastHit2D> interactCollisions = new List<RaycastHit2D>();
-
-    bool interact = false;
-    public bool busy = false;
-    public bool canMove = true;
+    private Animator _anim;
+    private List<RaycastHit2D> _castCollisions = new List<RaycastHit2D>();
+    private float _collisionOffset = 0.05f;
+    private ContactFilter2D _movementFilter;
+    private PlayerAnimation _playerAnimation;
+    private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        PlayerAnimation = GetComponent<PlayerAnimation>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        _rb = GetComponent<Rigidbody2D>();
+        _playerAnimation = GetComponent<PlayerAnimation>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        MovementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        PlayerAnimation.AnimControls();
-
-        if (Input.GetKeyDown(KeyCode.E) && !busy)
-        {
-            interact = true;
-        }
+        _playerAnimation.AnimControls();
     }
 
     private void FixedUpdate()
     {
-       if(interact)
-        {
-            interact = false;
-            TryInteract(lastDir);
-        }
-
-        if (canMove)
+        if (CanMove)
         {
             // If movement input is not 0, try to move
-            if (movementInput != Vector2.zero)
+            if (MovementInput != Vector2.zero)
             {
-                lastDir = movementInput;
-                bool success = TryMove(movementInput);
+                LastDir = MovementInput;
+                bool success = TryMove(MovementInput);
 
                 if (!success)
                 {
-                    success = TryMove(new Vector2(movementInput.x, 0));
+                    success = TryMove(new Vector2(MovementInput.x, 0));
                 }
 
                 if (!success)
                 {
-                    success = TryMove(new Vector2(0, movementInput.y));
+                    success = TryMove(new Vector2(0, MovementInput.y));
                 }
-
-                //animator.SetBool("isMoving", success);
-            }
-            else
-            {
-                //animator.SetBool("isMoving", false);
             }
         }
     }
@@ -83,15 +64,15 @@ public class PlayerMovement : MonoBehaviour
         if (direction != Vector2.zero)
         {
             // Check for potential collisions
-            int count = rb.Cast(
+            int count = _rb.Cast(
                 direction, // X and Y values between -1 and 1 that represent the direction from the body to look for collisions
-                movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
-                castCollisions, // List of collisions to store the found collisions into after the Cast is finished
-                moveSpeed * Time.fixedDeltaTime + collisionOffset); // The amount to cast equal to the movement plus an offset
+                _movementFilter, // The settings that determine where a collision can occur on such as layers to collide with
+                _castCollisions, // List of collisions to store the found collisions into after the Cast is finished
+                _moveSpeed * Time.fixedDeltaTime + _collisionOffset); // The amount to cast equal to the movement plus an offset
 
             if (count == 0)
             {
-                rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+                _rb.MovePosition(_rb.position + direction * _moveSpeed * Time.fixedDeltaTime);
                 return true;
             }
             else
@@ -107,31 +88,13 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void TryInteract(Vector2 direction)
-    {
-        int count = rb.Cast(
-            direction,
-            interactCollisions,
-            1);
-
-        foreach(RaycastHit2D hit in interactCollisions)
-        {
-            if(hit.collider.gameObject.GetComponent<IInteractable>() != null)
-            {
-                IInteractable interactable = hit.collider.gameObject.GetComponent<IInteractable>();
-
-                interactable.OnInteract();
-            }
-        }
-    }
-
     public void LockMovement()
     {
-        canMove = false;
+        CanMove = false;
     }
 
     public void UnlockMovement()
     {
-        canMove = true;
+        CanMove = true;
     }
 }
