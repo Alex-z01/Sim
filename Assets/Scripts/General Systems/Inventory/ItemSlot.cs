@@ -35,6 +35,7 @@ public class ItemSlot : MonoBehaviour
 
                 EmptySlot();
             }
+            // TODO: Consumable item implementation
         }
     }
 
