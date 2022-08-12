@@ -32,6 +32,7 @@ public class BartyTheCat : NPC
             GameManager.instance.UIManager.OpenNpcMenu(shopMenuPrefab);
         }
     }
+
     public override void OnFinshInteraction()
     {
         print("Done with this NPC");

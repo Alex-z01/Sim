@@ -28,4 +28,25 @@ public class ShopEntry : MonoBehaviour
 
         itemIcon.sprite = item.Item_Icon;
     }
+
+    public void SelectItem()
+    {
+        myShop.SelectItem(item);
+        Refresh();
+    }
+
+    public void Refresh()
+    {
+        itemCount.text = count.ToString();
+
+        if (myShop.mode == Shop.ShopMode.Buy)
+            itemPrice.text = item.Buy_Price.ToString();
+        else if (myShop.mode == Shop.ShopMode.Sell)
+            itemPrice.text = item.Sell_Price.ToString();
+
+        if(count == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
