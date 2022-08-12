@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     public GameObject DialogueBox;
     public GameObject PromptBox;
     public GameObject PromptContainer;
-    //public GameObject ShopDisplay;
+    public GameObject NpcMenuContainer;
 
     public Canvas mainCanvas;
 
@@ -114,8 +114,31 @@ public class UIManager : MonoBehaviour
 
     public void OpenNpcMenu(GameObject menu)
     {
-        GameObject npcMenu = Instantiate(menu, mainCanvas.transform);
-        npcMenu.name = $"{currentNPC.NPC_Name}'s {menu.name}";
+        bool menuFound = false;
+
+        // Check if menu already exists 
+        foreach(Transform obj in NpcMenuContainer.transform)
+        {
+            print($"{obj.GetComponent<Shop>().ShopName}, {menu.GetComponent<Shop>().ShopName}");
+            // If found turn it on
+            if(obj.GetComponent<Shop>().ShopName == menu.GetComponent<Shop>().ShopName)
+            {
+                obj.gameObject.SetActive(true);
+                menuFound = true;
+            }
+            // Turn off all other menus
+            else
+            {
+                obj.gameObject.SetActive(false);
+            }
+        }
+
+        // If it does not create it
+        if(!menuFound)
+        {
+            GameObject npcMenu = Instantiate(menu, NpcMenuContainer.transform);
+            npcMenu.name = $"{currentNPC.NPC_Name} - {menu.GetComponent<Shop>().ShopName}";
+        }
     }
 
     public void ToggleDialogue()
