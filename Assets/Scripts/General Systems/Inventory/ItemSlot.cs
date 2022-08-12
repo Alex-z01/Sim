@@ -31,10 +31,17 @@ public class ItemSlot : MonoBehaviour
             {
                 var equippable = (Equippable)attachedItem;
 
-                attachedItem = null;
-                itemIcon = null;
                 GameManager.instance.Player.GetComponent<PlayerInventory>().EquipGear(equippable);
+
+                EmptySlot();
             }
         }
+    }
+
+    public void EmptySlot()
+    {
+        attachedItem = null;
+        itemIcon.sprite = null;
+        itemCount.text = "";
     }
 }
