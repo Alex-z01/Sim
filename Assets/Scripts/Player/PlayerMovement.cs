@@ -5,12 +5,14 @@ using UnityEngine;
 // Takes and handles input and movement for a player character
 public class PlayerMovement : MonoBehaviour
 {
+    private PlayerAnimation PlayerAnimation;
+
     public float moveSpeed = 1f;
     public float collisionOffset = 0.05f;
     public ContactFilter2D movementFilter;
 
-    Vector2 movementInput;
-    Vector2 lastDir;
+    public Vector2 movementInput;
+    public Vector2 lastDir;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     Animator animator;
@@ -25,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //animator = GetComponent<Animator>();
+        PlayerAnimation = GetComponent<PlayerAnimation>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -33,7 +35,9 @@ public class PlayerMovement : MonoBehaviour
     {
         movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if(Input.GetKeyDown(KeyCode.E) && !busy)
+        PlayerAnimation.AnimControls();
+
+        if (Input.GetKeyDown(KeyCode.E) && !busy)
         {
             interact = true;
         }
@@ -70,16 +74,6 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 //animator.SetBool("isMoving", false);
-            }
-
-            // Set direction of sprite to movement direction
-            if (movementInput.x < 0)
-            {
-                spriteRenderer.flipX = true;
-            }
-            else if (movementInput.x > 0)
-            {
-                spriteRenderer.flipX = false;
             }
         }
     }
