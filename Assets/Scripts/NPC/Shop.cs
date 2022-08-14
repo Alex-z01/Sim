@@ -95,10 +95,14 @@ public class Shop : MonoBehaviour
             {
                 // Decrement item count
                 checkItem.count--;
-                //if(checkItem.count == 0) 
-
+                
+                if(checkItem.count == 0)
+                {
+                    playerInventory.inventory.Remove(checkItem);
+                }
 
                 // Add sell value to player money
+                playerInventory.coins += checkItem.item.Sell_Price;
             }
         }
     }

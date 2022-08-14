@@ -8,30 +8,29 @@ public class UIManager : MonoBehaviour
     public NPC currentNPC;
 
     public bool inPrompt;
+
+    [SerializeField]
+    private GameObject _catchMeter;
     [SerializeField]
     private GameObject dialogueBox;
+    [SerializeField]
+    private GameObject _fishingMeter;
+    [SerializeField]
+    private GameObject _fishingUI;
+    [SerializeField]
+    private GameObject npcMenuContainer;
     [SerializeField]
     private GameObject optionBox;
     [SerializeField]
     private GameObject promptContainer;
     [SerializeField]
-    private GameObject npcMenuContainer;
-
-    private List<Dialogue> _NPCdialogue;
-    private List<Prompt> _NPCprompts;
-
-    [SerializeField]
-    private GameObject _fishingUI;
-    [SerializeField]
-    private GameObject _fishingMeter;
-    [SerializeField]
-    private GameObject _catchMeter;
-
-    [SerializeField]
     private GameObject _promptPrefab;
 
     private int _dialogueIdx, _optionBoxIdx;
+    private List<Dialogue> _NPCdialogue;
+    private List<Prompt> _NPCprompts;
     private int _promptChoice;
+
 
     public void SubscribeNpcEvent(NPC curNPC)
     {
